@@ -1,0 +1,124 @@
+ftp.lif.net
+ftpsearch.lycos.com
+net.tamu.edu
+ftp.lake.de
+ftp.gj.net
+ftp.be.schule.de 
+ftp.ziplink.net 
+fizfak.sitc.ru
+ftp.fritz.de
+ftp.wdr.de
+ftp.ccc.de
+berlin.ccc.de
+koeln.ccc.de
+hamburg.ccc.de
+cr.yp.to
+ftp.nessus.org
+ftp.xos.nl
+ftp.strongcrypto.com
+ftp.trinux.org
+www.l0pht.com
+ftp.l0pht.com
+c0re.l0pht.com
+ftp.informatik.uni-kiel.de
+ethereal.zing.org
+ftp.falsehope.com
+ftp.porcupine.org
+ftp.cert.dfn.de
+ftp.tisl.ukans.ed
+coast.cs.purdue.edu
+ftp.acsu.buffalo.edu
+ftp.zedz.net
+
+rcode = 0 (Success), ancount=2
+Found 1 addresses for l0pht.com
+Found 1 addresses for BIFROST.SEASTROM.com
+Trying 199.201.145.1
+Trying 192.148.252.10
+l0pht.com	86400 IN	SOA	l0pht.com admin.l0pht.com(
+			99102901	;serial (version)
+			3600	;refresh period
+			1800	;retry refresh this often
+			604800	;expiration period
+			86400	;minimum TTL
+			)
+l0pht.com	86400 IN	NS	l0pht.com
+l0pht.com	86400 IN	NS	bifrost.seastrom.com
+l0pht.com	86400 IN	A	199.201.145.1
+l0pht.com	86400 IN	MX	10 l0pht.com
+l0phteye2.l0pht.com	86400 IN	CNAME	laiad.l0pht.com
+www2.l0pht.com	86400 IN	CNAME	m0neysh0t.l0pht.com
+radio.l0pht.com	86400 IN	A	199.201.145.5
+mailserver.l0pht.com	86400 IN	CNAME	l0pht.com
+www3.l0pht.com	86400 IN	CNAME	c0re.l0pht.com
+www4.l0pht.com	86400 IN	A	209.6.194.169
+chillin-at-da.l0pht.com	86400 IN	A	199.201.145.201
+whacked.l0pht.com	86400 IN	A	199.201.145.20
+whacked.l0pht.com	86400 IN	MX	5 l0pht.com
+0nus.l0pht.com	86400 IN	A	199.201.145.3
+0nus.l0pht.com	86400 IN	MX	10 l0pht.com
+0nus.l0pht.com	86400 IN	MX	5 0nus.l0pht.com
+l0phteye.l0pht.com	43200 IN	A	199.201.145.82
+kaiser.l0pht.com	86400 IN	A	199.201.145.90
+m0neysh0t.l0pht.com	86400 IN	A	199.232.79.50
+m0neysh0t.l0pht.com	86400 IN	MX	10 l0pht.com
+alliant.l0pht.com	86400 IN	A	199.201.145.13
+fatboy.l0pht.com	86400 IN	A	199.201.145.16
+ssl.l0pht.com	86400 IN	A	199.201.145.11
+cattech.l0pht.com	86400 IN	A	199.201.145.7
+h0nkin.l0pht.com	86400 IN	A	199.201.145.44
+powerwac.l0pht.com	86400 IN	A	199.201.145.45
+keeper.l0pht.com	86400 IN	A	199.201.145.79
+r00tin-at-da.l0pht.com	86400 IN	A	199.201.145.204
+cobalt.l0pht.com	86400 IN	A	199.201.145.93
+d0gshit.l0pht.com	86400 IN	MX	10 l0pht.com
+d0gshit.l0pht.com	900 IN	A	192.148.252.195
+nfrtest.l0pht.com	86400 IN	A	199.201.145.15
+d0pe.l0pht.com	86400 IN	A	199.201.145.24
+lotion.l0pht.com	86400 IN	A	199.201.145.14
+nub.l0pht.com	86400 IN	A	199.201.145.98
+bbs.l0pht.com	86400 IN	CNAME	c0re.l0pht.com
+kane.l0pht.com	86400 IN	A	199.201.145.80
+magik.l0pht.com	86400 IN	A	199.201.145.6
+hellspawn.l0pht.com	86400 IN	A	199.201.145.48
+intel.l0pht.com	86400 IN	A	199.201.145.23
+d0ck.l0pht.com	86400 IN	A	199.201.145.95
+dcd.l0pht.com	86400 IN	A	199.201.145.8
+mindgh0st.l0pht.com	86400 IN	A	199.201.145.22
+aurora.l0pht.com	86400 IN	A	199.201.145.31
+chills.l0pht.com	86400 IN	A	199.201.145.49
+camneerg.l0pht.com	86400 IN	A	199.201.145.121
+dually.l0pht.com	86400 IN	A	199.201.145.73
+t0kin-at-da.l0pht.com	86400 IN	A	199.201.145.202
+foo.l0pht.com	86400 IN	A	199.201.145.148
+wilhelm.l0pht.com	86400 IN	A	199.201.145.91
+ficus.l0pht.com	86400 IN	A	199.201.145.25
+sl0th.l0pht.com	86400 IN	A	199.201.145.30
+corundum.l0pht.com	86400 IN	A	199.201.145.50
+hanging-at-da.l0pht.com	86400 IN	A	199.201.145.200
+gassin-at-da.l0pht.com	86400 IN	A	199.201.145.203
+laiad.l0pht.com	86400 IN	A	199.201.145.9
+zeppelin.l0pht.com	86400 IN	A	199.201.145.51
+orb.l0pht.com	86400 IN	A	199.201.145.19
+horus.l0pht.com	86400 IN	A	199.201.145.4
+partying-at-the.l0pht.com	86400 IN	A	199.201.145.205
+crapintosh.l0pht.com	86400 IN	A	199.201.145.29
+www.l0pht.com	86400 IN	CNAME	m0neysh0t.l0pht.com
+ballz.l0pht.com	86400 IN	A	199.201.145.46
+palindrome.l0pht.com	86400 IN	A	199.201.145.47
+madwand.l0pht.com	86400 IN	A	199.201.145.12
+br0ke.l0pht.com	86400 IN	MX	5 l0pht.com
+br0ke.l0pht.com	86400 IN	A	199.201.145.28
+pr0n.l0pht.com	86400 IN	A	199.201.145.69
+ftp.l0pht.com	86400 IN	CNAME	c0re.l0pht.com
+c0re.l0pht.com	86400 IN	A	199.201.145.2
+c0re.l0pht.com	86400 IN	MX	10 l0pht.com
+c0re.l0pht.com	86400 IN	MX	5 c0re.l0pht.com
+pimpdaddy.l0pht.com	86400 IN	A	199.201.145.17
+l0pht.com	86400 IN	SOA	l0pht.com admin.l0pht.com(
+			99102901	;serial (version)
+			3600	;refresh period
+			1800	;retry refresh this often
+			604800	;expiration period
+			86400	;minimum TTL
+			)
