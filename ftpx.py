@@ -1,6 +1,6 @@
 #!/usr/local/bin/python -*- Mode: Python; tab-width: 4 -*-
 
-version = '$Id: ftpx.py,v 1.1 2001/12/30 00:43:13 drt Exp $'
+version = '$Id: ftpx.py,v 1.2 2002/01/18 07:38:39 drt Exp $'
 
 # TODO:
 # sort resp output
@@ -9,6 +9,7 @@ version = '$Id: ftpx.py,v 1.1 2001/12/30 00:43:13 drt Exp $'
 
 ftpuser = 'anonymous';
 ftppass = 'drt-ftpfind@un.bewaff.net';
+outputdir = 'filelists'
 
 # max time we wait for a sucessfull data gathering process
 timeout = 66
@@ -16,7 +17,7 @@ timeout = 66
 # number of concurrent querys this might be limited by your OS
 # Win 95: 55, Linux 2.0: 245, Linux 2.2: 1000
 # FreeBSD, NT: 1000; can be tweaked for more.
-concurrency = 4
+concurrency = 24
 
 import sys
 import socket
@@ -26,6 +27,8 @@ import asyncore
 import asynchat
 import ftpparse
 import md5
+import os
+import os.path
 
 def monitor():
     '''reap stale and open new connenctions until we reach concurrency'''
@@ -46,7 +49,9 @@ def monitor():
         if line[-1:] == '\n':
             line = line [:-1]
         if line != '':
-            s = ftpCommandChannel(line)
+            s = ftpCommandChannel(line.strip())
+            import gc
+            gc.collect()
         else:
             break
 
@@ -72,8 +77,28 @@ class ftpFileList:
         self.dirs = {}
         self.dirdupes = {}
 
+    def __repr__(self):
+        return "%s, %r, %r" % (self.host, self.dirs, self.dirdupres)
+
     def __del__(self):
-        print "('ftp://%s:%s@%s:%s', %r)" % (self.user, self.passwd, self.host, self.port, self.dirs)
+        servername = "%s,%s,%s,%s" % (self.host, self.port, self.user, self.passwd)
+        filename = os.path.join(outputdir, servername)
+        tmpname = os.path.join(outputdir, ".tmp.%s" % (servername))
+        fd = open(tmpname, 'w')
+        url = self.host
+        if self.port != 21:
+            url += ":%d" % self.port
+        if self.user !='anonymous':
+            url = '%s:%s@%s' % (self.user, self.passwd, url)
+        fd.write("{'server': 'ftp://%s', 'dirs':, %r}\n" % (url, self.dirs))
+        fd.close()
+        os.rename(tmpname, filename)
+        for x in self.dirs.keys():
+            self.dirs[x] = None
+            del(self.dirs[x])
+        self.dirs.clear()
+        self.dirs = None
+        self.dirdupes = None
 
     def addDir(self, path, files):
         if len(files) > 0:
@@ -100,12 +125,18 @@ class ftpDataChannel(asynchat.async_chat):
         self.timestamp = int(time.time())
         self.addtodo = addtodo
         self.addfiles = addfiles
+
+        # ensure path ends with "/"
+        if self.path[-1] != '/':
+            self.path += '/'
         
         try:
             self.connect((address, port))
         except:
             self.handle_error()
             self.close()
+
+        # Set terminator to something preforming better
         
     def handle_connect(self):
         '''we have successfull connected'''
@@ -114,7 +145,7 @@ class ftpDataChannel(asynchat.async_chat):
                
     def handle_error(self):
         '''print out error information to stderr'''
-        print >>sys.stderr, "ERROR:", self, self.host, self.port, sys.exc_info()[1]
+        print >>sys.stderr, self.host, ": ERROR:", self, self.host, self.port, sys.exc_info()[1]
     
     def collect_incoming_data (self, data):
         '''collect data which was recived on the socket'''
@@ -137,6 +168,8 @@ class ftpDataChannel(asynchat.async_chat):
                 if x[ftpparse.RETR] == 1 and x[ftpparse.SIZE] > 99:
                     files.append((x[ftpparse.NAME], x[ftpparse.SIZE], x[ftpparse.MTIME]))
         self.addfiles(self.path, files)
+        self.addfiles = None
+        self.addtodo = None
 
 class ftpCommandChannel (asynchat.async_chat):
     '''class implementing the actual scan'''
@@ -154,7 +187,8 @@ class ftpCommandChannel (asynchat.async_chat):
         self.donedirs = []
         self.pwd = '/'
         self.filelist = ftpFileList(self.host)
-        
+        self.datachan = None
+
         try:
             self.connect((address, 21))
         except:
@@ -168,17 +202,18 @@ class ftpCommandChannel (asynchat.async_chat):
                
     def handle_error(self):
         '''print out error information to stderr'''
-        print >>sys.stderr, "ERROR:", self.host, sys.exc_info()[1]
+        print >>sys.stderr, self.host, ": ERROR:", self.host, sys.exc_info()[1]
         
     def handle_close (self):
         '''when the connection is closed use monitor() to start new connections'''        
         self.close()
+        self.filelist = None
         monitor()
                
     def push(self, data):
         asynchat.async_chat.push(self, data)
         if __debug__:
-            print >>sys.stderr, ">>", data,
+            print >>sys.stderr, self.host, ">>", data,
             sys.stderr.flush()
             
     def collect_incoming_data (self, data):
@@ -193,7 +228,7 @@ class ftpCommandChannel (asynchat.async_chat):
         self.timestamp = int(time.time())
         # save response
         if __debug__:
-            print >>sys.stderr, "<<", repr(data), repr(self.state)
+            print >>sys.stderr, self.host, "<<", repr(data), repr(self.state)
             sys.stderr.flush()
 
         if len(data) < 4:
@@ -207,8 +242,10 @@ class ftpCommandChannel (asynchat.async_chat):
                 self.push("USER %s\r\n" % (ftpuser))
                 self.state = 'WAITx3xPASS'
             else:
+                # TODO: catch banners
                 print >>sys.stderr, "no successful greeting:", repr(data)
         elif data[3] == ' ' and self.state == 'WAITx3xPASS':
+            # TODO: check for 530 Permission denied.
             if data[:3] == '230' or data[:3] == '331' or data[:3] == '332':
                 # send PASS command
                 self.push("PASS %s\r\n" % (ftppass))
@@ -249,7 +286,9 @@ class ftpCommandChannel (asynchat.async_chat):
         elif data[3] == ' ' and self.state == 'WAIT257LIST':
             if data[:3] == '257' and (data.split('"')[1] == self.pwd or data.split('"')[1] == self.pwd[:-1]):
                 # send LIST command
-                s = ftpDataChannel(self.host, self.pasvport, self.pwd, self.addTodo, self.filelist.addDir)
+                if self.datachan:
+                    del(self.datachan)
+                self.datachan = ftpDataChannel(self.host, self.pasvport, self.pwd, self.addTodo, self.filelist.addDir)
                 self.push("LIST\r\n")
                 self.state = 'WAIT150'
             else:
@@ -300,6 +339,10 @@ class ftpCommandChannel (asynchat.async_chat):
         else:
             print "ignored", dirname
                     
+
+import gc
+gc.set_debug(gc.DEBUG_LEAK)
+gc.collect()
 # "main"
 # use monitor() to fire up the number of connections we want
 monitor()
