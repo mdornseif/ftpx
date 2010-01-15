@@ -1,7 +1,7 @@
 This is a crawler for ftp servers beeing able to crawl hundreds of servers
 in paralell.
 
-You need ftpparsemodule from http://c0re.jp/c0de/ftpparsemodule/
+You need ftpparsemodule from http://github.com/mdornseif/ftpparsemodule
 
 More information can be found at http://c0re.jp/c0de/ftpx/
 
